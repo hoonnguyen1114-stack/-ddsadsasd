@@ -232,7 +232,6 @@ function updateButtonStates() {
   const generateBasicBtn = document.getElementById("generateBasicBtn");
   const generateAdvBtn = document.getElementById("generateAdvBtn");
   const generateCustomBtn = document.getElementById("generateCustomBtn");
-  const clearBasicBtn = document.getElementById("clearBasicBtn");
   const clearBtn = document.getElementById("clearBtn");
   const downloadBtn = document.getElementById("downloadBtn");
   const copyBtn = document.getElementById("copyBtn");
@@ -240,7 +239,6 @@ function updateButtonStates() {
   if (generateBasicBtn) generateBasicBtn.disabled = !hasFile || !hasBasicRules;
   if (generateAdvBtn) generateAdvBtn.disabled = !hasFile || !hasAdvRules;
   if (generateCustomBtn) generateCustomBtn.disabled = !hasFile || !hasCustomPatterns;
-  if (clearBasicBtn) clearBasicBtn.disabled = lastResult === "" || !hasFile;
   if (clearBtn) clearBtn.disabled = lastResult === "" || !hasFile;
   if (downloadBtn) downloadBtn.disabled = lastResult === "";
   if (copyBtn) copyBtn.disabled = lastResult === "";
