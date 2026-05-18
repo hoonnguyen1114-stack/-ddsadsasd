@@ -2,8 +2,11 @@ const express = require("express");
 const path = require("path");
 const app = express();
 
+// Middleware
 app.use(express.json({ limit: "50mb" }));
-app.use(express.static(".")); // Serve static files (HTML, CSS, JS)
+
+// 🔧 FIX: Phục vụ static files từ thư mục hiện tại
+app.use(express.static(path.join(__dirname)));
 
 // ============================================
 // RULES IMPLEMENTATION (Backend)
