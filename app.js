@@ -218,6 +218,8 @@ function createRuleGroup(group, tab) {
 }
 
 function updateButtonStates() {
+  console.log("🔍 updateButtonStates called");
+  
   const hasFile = lastData !== null && lastData.length > 0;
   const hasBasicRules = document.querySelectorAll('#basicRulesContainer input:checked').length > 0;
   const hasAdvRules = document.querySelectorAll('#advancedRulesContainer input:checked').length > 0;
@@ -228,7 +230,10 @@ function updateButtonStates() {
   const separators = document.getElementById("customSeparators") ? document.getElementById("customSeparators").value.trim() : "";
   const hasCustomPatterns = suffixes || prefixes || separators;
   
-  // Update button states
+  // DEBUG LOG
+  console.log({hasFile, hasBasicRules, hasAdvRules, hasCustomPatterns, lastResult: lastResult ? "YES" : "NO"});
+  
+  // Update button states - ONLY DISABLE, NEVER ENABLE
   const generateBasicBtn = document.getElementById("generateBasicBtn");
   const generateAdvBtn = document.getElementById("generateAdvBtn");
   const generateCustomBtn = document.getElementById("generateCustomBtn");
@@ -236,12 +241,41 @@ function updateButtonStates() {
   const downloadBtn = document.getElementById("downloadBtn");
   const copyBtn = document.getElementById("copyBtn");
   
-  if (generateBasicBtn) generateBasicBtn.disabled = !hasFile || !hasBasicRules;
-  if (generateAdvBtn) generateAdvBtn.disabled = !hasFile || !hasAdvRules;
-  if (generateCustomBtn) generateCustomBtn.disabled = !hasFile || !hasCustomPatterns;
-  if (clearBtn) clearBtn.disabled = lastResult === "" || !hasFile;
-  if (downloadBtn) downloadBtn.disabled = lastResult === "";
-  if (copyBtn) copyBtn.disabled = lastResult === "";
+  // BASIC BUTTON
+  const shouldDisableBasic = !hasFile || !hasBasicRules;
+  if (generateBasicBtn) {
+    generateBasicBtn.disabled = shouldDisableBasic;
+    console.log("generateBasicBtn disabled:", shouldDisableBasic);
+  }
+  
+  // ADVANCED BUTTON
+  const shouldDisableAdv = !hasFile || !hasAdvRules;
+  if (generateAdvBtn) {
+    generateAdvBtn.disabled = shouldDisableAdv;
+    console.log("generateAdvBtn disabled:", shouldDisableAdv);
+  }
+  
+  // CUSTOM BUTTON
+  const shouldDisableCustom = !hasFile || !hasCustomPatterns;
+  if (generateCustomBtn) {
+    generateCustomBtn.disabled = shouldDisableCustom;
+    console.log("generateCustomBtn disabled:", shouldDisableCustom);
+  }
+  
+  // CLEAR BUTTON
+  const shouldDisableClear = lastResult === "" || !hasFile;
+  if (clearBtn) {
+    clearBtn.disabled = shouldDisableClear;
+  }
+  
+  // DOWNLOAD & COPY BUTTONS
+  const shouldDisableDownloadCopy = lastResult === "";
+  if (downloadBtn) {
+    downloadBtn.disabled = shouldDisableDownloadCopy;
+  }
+  if (copyBtn) {
+    copyBtn.disabled = shouldDisableDownloadCopy;
+  }
 }
 
 function switchTab(tab) {
@@ -357,6 +391,8 @@ function parseFileContent(content) {
 // ============================================
 
 async function generateVariants(mode) {
+  console.log("🚀 generateVariants called with mode:", mode);
+  
   if (!lastData || lastData.length === 0) {
     showToast("❌ Vui lòng tải file trước!", "error");
     return;
